@@ -16,7 +16,7 @@ app.use(express.json());
 app.use(cors());
 
 app.get("/", (req, res) => {
-  res.json("hola, como va?");
+  res.json("hello this is the backend");
 });
 
 app.get("/books", (req, res) => {
