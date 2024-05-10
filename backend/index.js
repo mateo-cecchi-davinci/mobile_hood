@@ -8,7 +8,7 @@ const db = mysql.createConnection({
   host: "localhost",
   user: "root",
   password: "Mateocecchi112324",
-  database: "test",
+  database: "mobile_hood",
 });
 
 //middlewares
@@ -68,6 +68,19 @@ app.put("/books/:id", (req, res) => {
   db.query(query, [...values, bookId], (err, data) => {
     if (err) return res.json(err);
     return res.json("Book has been updated successfully");
+  });
+});
+
+app.post("/login", (req, res) => {
+  const query = "SELECT * FROM users WHERE email = ? AND password = ?";
+
+  db.query(query, [req.body.email, req.body.password], (err, data) => {
+    if (err) return res.json(err);
+    if (data.length > 0) {
+      return res.json("Login Successfully");
+    } else {
+      return res.json("User does not exist");
+    }
   });
 });
 
