@@ -85,7 +85,7 @@ app.listen(8800, () => {
 // });
 
 app.get("/user", authenticateToken, (req, res) => {
-  const query = "SELECT 1 FROM users WHERE email = ?";
+  const query = "SELECT * FROM users WHERE email = ?";
   db.query(query, [user.email], (err, data) => {
     if (err) return res.json(err);
     return res.json(data);
@@ -118,7 +118,7 @@ app.post("/register", async (req, res) => {
 });
 
 app.post("/login", async (req, res) => {
-  const query = "SELECT 1 FROM users WHERE email = ?";
+  const query = "SELECT * FROM users WHERE email = ?";
   db.query(query, [req.body.email], async (err, data) => {
     if (err) return res.json(err);
     if (data == null) {
@@ -131,7 +131,6 @@ app.post("/login", async (req, res) => {
         const accessToken = generateAccessToken(user);
         const refreshToken = jwt.sign(user, process.env.REFRESH_TOKEN_SECRET);
         const query = "UPDATE users SET `refresh_token` = ? WHERE user_id = ?";
-
         db.query(query, [refreshToken, user.user_id], (err, data) => {
           if (err) return res.json(err);
           return;
@@ -164,7 +163,7 @@ function generateAccessToken(user) {
 }
 
 app.post("/token", (req, res) => {
-  const query = "SELECT 1 FROM users WHERE refresh_token = ?";
+  const query = "SELECT * FROM users WHERE refresh_token = ?";
   const refreshToken = req.body.token;
 
   if (refreshToken == null) return res.sendStatus(401);
@@ -219,7 +218,7 @@ app.post("/buisnesses", (req, res) => {
     return res.status(400).json({ error: "All fields are required" });
   }
 
-  const userCheckQuery = "SELECT 1 FROM users WHERE user_id = ?";
+  const userCheckQuery = "SELECT * FROM users WHERE user_id = ?";
   db.query(userCheckQuery, [fk_buisnesses_users], (err, result) => {
     if (err) return res.json(err);
     if (result.length === 0) return res.json("User not found");
